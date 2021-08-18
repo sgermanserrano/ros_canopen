@@ -216,7 +216,7 @@ bool DefaultHomingMode::executeHoming(canopen::LayerStatus &status) {
         return error(status, "homing error at start");
     }
 
-    time_point finish_time = get_abs_time(boost::chrono::seconds(10)); //
+    time_point finish_time = get_abs_time(homing_timeout_); //
 
     // wait for attained
     if(!cond_.wait_until(lock, finish_time, masked_status_not_equal<MASK_Error | MASK_Attained, 0> (status_))){
@@ -240,6 +240,12 @@ bool DefaultHomingMode::executeHoming(canopen::LayerStatus &status) {
     }
 
     return error(status, "something went wrong while homing");
+}
+
+void DefaultHomingMode::setHomingTimeout(const boost::chrono::seconds &homing_timeout) {
+    
+    homing_timeout_ = homing_timeout;
+
 }
 
 bool Motor402::setTarget(double val){
@@ -503,6 +509,8 @@ void Motor402::handleInit(LayerStatus &status){
         status.error("Could not enter homing mode");
         return;
     }
+
+    homing->setHomingTimeout(homing_timeout_);
 
     if(!homing->executeHoming(status)){
         status.error("Homing failed");
