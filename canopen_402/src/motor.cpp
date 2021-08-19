@@ -217,7 +217,10 @@ bool DefaultHomingMode::executeHoming(canopen::LayerStatus &status) {
     }
 
     time_point finish_time = get_abs_time(homing_timeout_); //
-
+    
+    status.warn("finish_time");
+    status.warn(std::to_string(finish_time.time_since_epoch().count()));
+    
     // wait for attained
     if(!cond_.wait_until(lock, finish_time, masked_status_not_equal<MASK_Error | MASK_Attained, 0> (status_))){
         return error(status, "homing not attained");
