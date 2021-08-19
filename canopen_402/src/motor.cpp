@@ -512,6 +512,9 @@ void Motor402::handleInit(LayerStatus &status){
 
     homing->setHomingTimeout(homing_timeout_);
 
+    status.warn("homing_timeout");
+    status.warn(std::to_string(homing_timeout_.count()));
+
     if(!homing->executeHoming(status)){
         status.error("Homing failed");
         return;
