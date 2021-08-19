@@ -216,7 +216,9 @@ bool DefaultHomingMode::executeHoming(canopen::LayerStatus &status) {
         return error(status, "homing error at start");
     }
 
-    time_point finish_time = get_abs_time(homing_timeout_); //
+    //time_point finish_time = get_abs_time(homing_timeout_); //
+    time_point finish_time = get_abs_time(boost::chrono::seconds(10)); //
+    
     
     status.warn("finish_time");
     status.warn(std::to_string(finish_time.time_since_epoch().count()));
