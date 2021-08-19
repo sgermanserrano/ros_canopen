@@ -217,7 +217,7 @@ bool DefaultHomingMode::executeHoming(canopen::LayerStatus &status) {
     }
 
     //time_point finish_time = get_abs_time(homing_timeout_); //
-    time_point finish_time = get_abs_time(boost::chrono::seconds(10)); //
+    time_point finish_time = get_abs_time(boost::chrono::seconds(120)); //
     
     
     status.warn("finish_time");
