@@ -278,10 +278,13 @@ bool DefaultHomingMode::executeHoming(canopen::LayerStatus &status, const boost:
     status.warn(std::to_string(homing_timeout.count()));
     status.warn(std::to_string(prepare_time.time_since_epoch().count()));
     status.warn(std::to_string(finish_time.time_since_epoch().count()));
+    status.warn(std::to_string(get_abs_time().time_since_epoch().count()));
+    
     if(!cond_.wait_until(lock, finish_time, masked_status_not_equal<MASK_Error | MASK_Attained, 0> (status_))){
         return error(status, "homing not attained");
     }
     if(status_ & MASK_Error){
+    status.warn(std::to_string(get_abs_time().time_since_epoch().count()));
         return error(status, "homing error during process");
     }
 
