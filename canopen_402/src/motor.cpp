@@ -452,10 +452,12 @@ bool Motor402::readState(LayerStatus &status, const LayerState &current_state){
         status.warn("mode does not match");
     }
     if(sw & (1<<State402::SW_Internal_limit)){
-        if(!stop_on_internal_limit_ || old_sw & (1<<State402::SW_Internal_limit) || current_state != Ready){
+        if(old_sw & (1<<State402::SW_Internal_limit) || current_state != Ready){
             status.warn(name + std::string(": Internal limit active"));
         }else{
-            status.error(name + std::string(": Internal limit active"));
+            if (!stop_on_internal_limit_) {
+                status.error(name + std::string(": Internal limit active"));
+            }
         }
     }
 
